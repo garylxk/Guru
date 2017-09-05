@@ -25,6 +25,7 @@ public class CommunicateWatson {
 	private String password = "5b8m2hpjeAQp";
 	private String workspaceId = "61f50108-996e-48c0-a2f1-eb03d86ddd5e";
 
+	@SuppressWarnings("unchecked")
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 
@@ -53,7 +54,7 @@ public class CommunicateWatson {
 
 			return response.toString();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+		
 			e.printStackTrace();
 			return "Http Error 400";
 		} catch (Exception e) {
