@@ -56,40 +56,42 @@ public class CommsWatson extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		//Establish Watson Connection
-		establishConn();
-		
-		String bodyContent = "";
-		if ("POST".equalsIgnoreCase(request.getMethod())) 
-		{
-			bodyContent = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-		}
-		
-		response.setContentType("text/html;charset=UTF-8");
-
 		try {
-			JSONObject json = (JSONObject) parseJson(bodyContent);
+			// Establish Watson Connection
+			establishConn();
 
-			String text = ((JSONObject) json.get("input")).get("text").toString();
-			
-			Map<String, Object> context = null;
-			try {
-				context = (Map) json.get("context");
-			} catch (Exception e) {
+			String bodyContent = "";
+			if ("POST".equalsIgnoreCase(request.getMethod())) {
+				bodyContent = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 			}
-			;
 
-			MessageRequest newMessage = new MessageRequest.Builder().inputText(text)
-					// Replace with the context obtained from the initial request
-					.context(context).build();
+			response.setContentType("text/html;charset=UTF-8");
 
-			MessageResponse content = service.message(workspaceId, newMessage).execute();
-			response.getWriter().append(content.toString());	
+			try {
+				JSONObject json = (JSONObject) parseJson(bodyContent);
 
-		} catch (Exception e) {
+				String text = ((JSONObject) json.get("input")).get("text").toString();
 
-			//return "Http Error 500";
+				Map<String, Object> context = null;
+				try {
+					context = (Map) json.get("context");
+				} catch (Exception e) {
+				}
+				;
+
+				MessageRequest newMessage = new MessageRequest.Builder().inputText(text)
+						// Replace with the context obtained from the initial request
+						.context(context).build();
+
+				MessageResponse content = service.message(workspaceId, newMessage).execute();
+				response.getWriter().append(content.toString());
+
+			} catch (Exception e) {
+
+				// return "Http Error 500";
+			}
+		}catch (Exception e) {
+			response.getWriter().append("Error 500, Internal Server Error");
 		}
 	}
 
