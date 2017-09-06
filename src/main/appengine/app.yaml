@@ -12,7 +12,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 # [START appyaml]
-application:impsplunk-1296
 runtime: java
 env: flex
 
